@@ -16,7 +16,7 @@ struct player{
 };
 
 
-/* --- Function prototype --- */
+/* --- Functions prototypes --- */
 
 void playerMove();
 
