@@ -36,18 +36,11 @@ int main (int argc, char * argv[]){
   int n = 10; // Longeur du plateau de jeu
   int m = 10; // Largeur du plateau de jeu
 
-  int ** plateau = malloc(n * sizeof(*plateau));
-  int i;
-  for(i = 0; i < n; i++){
-    plateau[i] = malloc(m * sizeof(int));
-  }
+  plateau = createArr2d(n, m);
 
   // Libération du plateau de jeu
-
-  for(i = 0; i < n; i++){
-    free(plateau[i]);
-  }
-  free(plateau);
+  
+  freeArr2d(plateau, n);
 
   return 0;
 }
