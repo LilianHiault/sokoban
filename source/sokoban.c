@@ -36,10 +36,10 @@ int main (int argc, char * argv[]){
   int n = 10; // Longeur du plateau de jeu
   int m = 10; // Largeur du plateau de jeu
 
-  plateau = createArr2d(n, m);
+  int ** plateau = createArr2d(n, m);
 
   // Libération du plateau de jeu
-  
+
   freeArr2d(plateau, n);
 
   return 0;

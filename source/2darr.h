@@ -1,8 +1,8 @@
 /* --- Protoypes --- */
 
-void fillArr2d(int **, int);
+void fillArr2d(int **, int, int);
 
-void printArr2d(int ** , int);
+void printArr2d(int ** , int, int);
 
 int ** createArr2d(int, int);
 
@@ -11,17 +11,16 @@ void freeArr2d(int **, int);
 
 /* --- Functions --- */
 
-float ** createArr2d(int n, int m){
-  // Create 2 dimensions array
-  float ** tab = NULL;
-  if ((tab = (float **)malloc(n * sizeof(float *)) == NULL)){
-    free(tab);
-    tab = NULL;
+int ** createArr2d(int n, int m){
+  // Creates 2 dimensions array
+  int ** tab = NULL;
+  if ((tab = malloc(n * sizeof(*tab)) == NULL)){
+    //perror
   }
 
   int i, k;
   for(i = 0; i < n; i++){
-    if ((tab[i] = (float *)malloc(m * sizeof(float)) == NULL)){
+    if ((tab[i] = malloc(m * sizeof(*tab[i])) == NULL)){
       for(k = 0; k <= i; k++){
         free(tab[k]);
       }
@@ -66,7 +65,7 @@ void printArr2d(int ** tab, int n, int m)
   printf("\n");
 }
 
-void freeArr2d(tab **, taille){
+void freeArr2d(int ** tab, int taille){
   int i;
   for(i = 0; i < taille; i++){
     free(tab[i]);
