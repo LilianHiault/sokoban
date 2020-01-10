@@ -1,7 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
-#include <SDL/SDL.h>
 
 #include "2darr.h"
 
@@ -37,6 +35,17 @@ int main (int argc, char * argv[]){
   int m = 10; // Largeur du plateau de jeu
 
   int ** plateau = createArr2d(n, m);
+
+  // Ouverture du niveau
+
+  FILE * level = NULL;
+  if((level = fopen("levels/level1.txt", "r")) == NULL){
+    perror("Problème d'ouverture du fichier");
+  }
+
+  // Fermeture du fichier niveau
+
+  fclose(level);;
 
   // Libération du plateau de jeu
 

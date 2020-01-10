@@ -1,5 +1,5 @@
 CC=gcc
-FLAGS= -Wall -Wextra
+FLAGS= -Wall -Wextra -g
 OBJETS= sokoban.o
 
 all:sokoban
