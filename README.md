@@ -22,5 +22,5 @@ Facultatif :
   - ' ' pour le sol
   - '#' pour les murs
   - 'I' pour les points d'intérêts
-  - 'C' pour les caisses
-  - 'P' pour le personnage
+  - 'C' pour les caisses et 'c' si elles sont sur des points d'intérêts
+  - 'P' pour le personnage et 'p' si il est sur un points d'intérêt
