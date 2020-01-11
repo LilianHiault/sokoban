@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <inttypes>
 
 #include "2darr.h"
 
@@ -16,40 +18,56 @@ struct player{
 };
 
 
-/* --- Functions prototypes --- */
+/* --- Prototypes de fonction --- */
 
 void playerMove();
 
 
-/* --- Main function --- */
+/* --- Main --- */
 
-int main (int argc, char * argv[]){
+int main (int argc, char * argv[]) {
   (void) argc;
   (void) argv;
 
   printf("Jeu du Sokoban\n");
 
-  // Création du plateau de jeu
-
-  int n = 10; // Longeur du plateau de jeu
-  int m = 10; // Largeur du plateau de jeu
-
-  int ** plateau = createArr2d(n, m);
-
   // Ouverture du niveau
+
+  int largeur = 10; // Longeur du plateau de jeu
+  int hauteur = 10; // Hauteur du plateau de jeu
 
   FILE * level = NULL;
   if((level = fopen("levels/level1.txt", "r")) == NULL){
-    perror("Problème d'ouverture du fichier");
+    perror("Problème d'ouverture du fichier de niveau");
+    exit(EXIT_FAILURE);
+  }
+
+  char buffer[BUFSIZ];
+  fgets(buffer, BUFSIZ, level); // buffer contient la première ligne du fichier
+
+  char * token = strtok(buffer, " ");
+  while(token != NULL) {
+    printf("Token : %s\n", token);
+
+    largeur = strtoi(token, NULL);
+    hauteur = strtoi(token, NULL);
+    printf("Largeur : %d", largeur);
+    printf("Hauteur : %d", hauteur);
+
+    token = strtok(NULL, " ");
   }
 
   // Fermeture du fichier niveau
 
-  fclose(level);;
+  fclose(level);
+
+  // Création du plateau de jeu
+
+  int ** plateau = createArr2d(largeur, hauteur);
 
   // Libération du plateau de jeu
 
-  freeArr2d(plateau, n);
+  freeArr2d(plateau, largeur);
 
   return 0;
 }

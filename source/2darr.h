@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 /* --- Protoypes --- */
 
 void fillArr2d(int **, int, int);
@@ -14,13 +16,16 @@ void freeArr2d(int **, int);
 int ** createArr2d(int n, int m){
   // Creates 2 dimensions array
   int ** tab = NULL;
-  if ((tab = malloc(n * sizeof(*tab)) == NULL)){
-    //perror
+  tab = malloc(n * sizeof(*tab));
+  if (tab == NULL){
+    perror("Problème lors de la création du tableau");
+    exit(EXIT_FAILURE);
   }
 
   int i, k;
   for(i = 0; i < n; i++){
-    if ((tab[i] = malloc(m * sizeof(*tab[i])) == NULL)){
+    tab[i] = malloc(m * sizeof(*tab[i]));
+    if (tab[i] == NULL){
       for(k = 0; k <= i; k++){
         free(tab[k]);
       }
