@@ -21,6 +21,8 @@ struct player{
 
 void fillPlateau(int ** plateau, int largeur, int hauteur, FILE * level);
 
+void fillPlateau(int ** plateau, int largeur, int hauteur, FILE * level);
+
 
 /* --- Main --- */
 
@@ -88,14 +90,10 @@ int main (int argc, char * argv[]) {
 
 void fillPlateau(int ** plateau, int largeur, int hauteur, FILE * level){
   /* --- Mettre le contenu du niveau dans le plateau de jeu --- */
-  int carac = 'a';
-
   int i, j;
-    for(i = 0; i < hauteur; i++){
-      for(j = 0; j < largeur; j++){
-      carac = fgetc(level); // Lit et avance d'un caractère
-      printf("%c", carac);
-      plateau[j][i] = carac;
+  for(i = 0; i < hauteur; i++){
+    for(j = 0; j < largeur; j++){
+      plateau[j][i] = fgetc(level); // Lit et avance d'un caractère
     }
     fgetc(level); // Enlève le retour à la ligne
   }

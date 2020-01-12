@@ -2,8 +2,6 @@
 
 /* --- Protoypes --- */
 
-void fillArr2d(int **, int, int);
-
 void printArr2d(int ** , int, int);
 
 int ** createArr2d(int, int);
