@@ -60,14 +60,12 @@ void printArr2d(int ** tab, int n, int m)
   int i,j;
   for(i = 0; i < n; i++)
   {
-    printf("\n");
     for(j = 0; j < m; j++)
     {
-      printf("%d ", tab[i][j]);
+      printf("%c", tab[i][j]);
     }
     printf("\n");
   }
-  printf("\n");
 }
 
 void freeArr2d(int ** tab, int taille){
