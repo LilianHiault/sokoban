@@ -59,18 +59,18 @@ int main(){
 
   SDL_FillRect(ecran,NULL,SDL_MapRGB(ecran->format,150,200,175));
   SDL_Flip(ecran);
-  OFF =  SDL_LoadBMP("interrupteurOff.bmp");
-  ON =  SDL_LoadBMP("interrupteurOn.bmp");
-  Brique = SDL_LoadBMP("Bloc.bmp");
-  Michel = SDL_LoadBMP("Michel2.bmp");
-  MichelPoint = SDL_LoadBMP("MichelPoint.bmp");
-  Point = SDL_LoadBMP("Point.bmp");
+  OFF =  SDL_LoadBMP("img/interrupteurOff.bmp");
+  ON =  SDL_LoadBMP("img/interrupteurOn.bmp");
+  Brique = SDL_LoadBMP("img/Bloc.bmp");
+  Michel = SDL_LoadBMP("img/Michel2.bmp");
+  MichelPoint = SDL_LoadBMP("img/MichelPoint.bmp");
+  Point = SDL_LoadBMP("img/Point.bmp");
 
 
-  
+
   SDL_WM_SetCaption("SokobanBV",NULL);
   SDL_Flip(ecran);
-  
+
   char** TJeu =(char**) malloc(largeur*sizeof(char*));
   for(i=0; i<largeur;i++){
   TJeu[i]=   (char*) malloc((hauteur+1)*sizeof(char));
@@ -90,22 +90,22 @@ int main(){
   TJeu[4][1]='C';
   TJeu[4][2]=' ';
   TJeu[5][2]=' ';
-  
-  
 
-  
+
+
+
   deplacement(TJeu,hauteur,largeur);
   SDL_FreeSurface(ecran);
   SDL_Quit();
   free(TJeu);
-  
+
   return 0;}
 
 void trouvePerso(char ** TJeu,int hauteur,int largeur,pos * perso,char* caseInit){
   // position perso;
   perso->x=0;
   perso->y=0;
-  
+
   int i,j;
   for(i = 0; i < largeur; i++)
   {
@@ -120,7 +120,7 @@ void trouvePerso(char ** TJeu,int hauteur,int largeur,pos * perso,char* caseInit
   caseInit=&TJeu[perso->y][perso->x];
   //printf("position=%d %d\n",perso->x,perso->y);
 }
-    
+
 
 void afficheTab2D(char ** tab, int hauteur,int largeur)
 {
@@ -138,7 +138,7 @@ void afficheTab2D(char ** tab, int hauteur,int largeur)
 }
 
 
-	
+
 SDL_Event pause(){
   // printf("oijio");
   int cont=1;
@@ -168,7 +168,7 @@ void deplacement(char** TJeu,int hauteur,int largeur){
   pos caisse;
   char nouvCase;
   char exCase;
-  
+
   trouvePerso(TJeu,hauteur,largeur,&perso,&nouvCase);
   afficheTab2D(TJeu,hauteur,largeur);
   while(cont){
@@ -177,31 +177,31 @@ void deplacement(char** TJeu,int hauteur,int largeur){
     printf("position=%d %d\n",perso.x,perso.y);
     printf("position=%d %d\n",posPrev.x,posPrev.y);
     event= pause();
-    
+
     switch(event.type){
     case SDL_QUIT:
       cont=0;
     case SDL_KEYDOWN:
       switch(event.key.keysym.sym){
-	
+
       case SDLK_UP:
-	if(perso.y>0){ 
+	if(perso.y>0){
 	  perso.y--;
 	}
 	break ;
-	
+
       case SDLK_DOWN:
 	if(perso.y<hauteur-1){
 	  perso.y++;
 	}
 	break ;
-	
+
       case SDLK_LEFT :
-	if(perso.x>0){    
+	if(perso.x>0){
 	  perso.x--;
 	}
 	break ;
-	
+
       case SDLK_RIGHT:
 	if(perso.x<largeur-1){
 	  perso.x++;
@@ -215,22 +215,22 @@ void deplacement(char** TJeu,int hauteur,int largeur){
     }
 
 
-    
+
     if( TJeu[perso.x][perso.y]=='C' ||TJeu[perso.x][perso.y]=='c' ){
       caisse.x = perso.x + (perso.x - posPrev.x);
       caisse.y = perso.y + (perso.y - posPrev.y);
       if(caisse.x <largeur && caisse.x >=0 && caisse.y >=0 && caisse.y <hauteur){
       bouge(TJeu, TJeu[perso.x][perso.y], hauteur, largeur,  &perso , &caisse);
       }
-      
+
     }
     bouge(TJeu, TJeu[posPrev.x][posPrev.y], hauteur, largeur,  &posPrev,&perso);
 
-    
-    afficheTab2D(TJeu,hauteur,largeur);   
+
+    afficheTab2D(TJeu,hauteur,largeur);
     dessineTJeu(TJeu,hauteur,largeur);
 
-      
+
     if(cont){
       victoire(TJeu,hauteur,largeur,&cont);
       if( cont-1){
@@ -238,7 +238,7 @@ void deplacement(char** TJeu,int hauteur,int largeur){
       }
     }
   }
-  
+
 }
 
 
@@ -247,34 +247,34 @@ void bouge(char** TJeu,char objet,int hauteur,int largeur, pos * posPrev, pos * 
   char nouvCase =objet ;
   char exCase = objet;
   char* change= (char*) malloc((hauteur+1)*sizeof(char));
-  
+
   if(posSuiv->x < largeur && posSuiv->y >= 0 && posSuiv->x >=0 && posSuiv->y < hauteur){
-    
+
     //   printf("a");
     if(TJeu[posSuiv->x][posSuiv->y]!='#' && TJeu[posSuiv->x][posSuiv->y]!='C'  && TJeu[posSuiv->x][posSuiv->y]!='c' ){
-      
-      
+
+
       //    printf("b");
-      
+
       if((objet=='c' ||objet== 'p') && TJeu[posSuiv->x][posSuiv->y]==' '){
 	nouvCase=objet-32;
 	exCase='I';
-        
-	
-	
+
+
+
       }
       else if((objet=='C' ||objet== 'P') && TJeu[posSuiv->x][posSuiv->y]=='I'){
 	nouvCase=objet+32;
 	exCase=' ';
-	
-	
+
+
       }
       else if((objet=='C' ||objet== 'P') && TJeu[posSuiv->x][posSuiv->y]==' '){
 
 	nouvCase=objet;
 	exCase=' ';
-	
-      
+
+
       }
       else if((objet=='c' ||objet== 'p') && TJeu[posSuiv->x][posSuiv->y]=='I'){
 
@@ -283,16 +283,16 @@ void bouge(char** TJeu,char objet,int hauteur,int largeur, pos * posPrev, pos * 
       }
 
 
-      
+
     }
     else{
       posSuiv->x = posPrev->x;
       posSuiv->y = posPrev->y;
       exCase = objet;
       nouvCase = objet;
-    
+
     }
-    
+
     //   printf("ex %c nouv%c",exCase,nouvCase);
   }
   else{
@@ -300,21 +300,21 @@ void bouge(char** TJeu,char objet,int hauteur,int largeur, pos * posPrev, pos * 
     posSuiv->y = posPrev->y;
     exCase = objet;
     nouvCase = objet;
-      
+
     //    printf("e0x %c nouv%c",exCase,nouvCase);
   }
-  
-  
+
+
   strcpy(change,TJeu[posPrev->x]);
-  change[posPrev->y]=exCase;  
+  change[posPrev->y]=exCase;
   strcpy(TJeu[posPrev->x],change);
-  
-  
+
+
   strcpy(change,TJeu[posSuiv->x]);
-  change[posSuiv->y]=nouvCase;  
+  change[posSuiv->y]=nouvCase;
   strcpy(TJeu[posSuiv->x],change);
   free(change);
-  
+
 }
 
 void victoire(char** TJeu, int hauteur,int largeur, int* cont){
@@ -322,7 +322,7 @@ void victoire(char** TJeu, int hauteur,int largeur, int* cont){
   int j=0;
   int reste = 1;
   *cont=0;
-  
+
   while(i<largeur && reste){
     // printf("\ni%d\n",i);
     while(j<hauteur && reste){
@@ -360,7 +360,7 @@ void dessineTJeu(char ** TJeu,int hauteur, int largeur){
 	dessine(Brique);}
       else if(TJeu[i][j]=='C'){
 	//	SDL_BlitSurface(OFF,NULL,ecran,&position) ;}
-	
+
 	dessine(OFF);}
       else if(TJeu[i][j]=='c'){
 	//SDL_BlitSurface(ON,NULL,ecran,&position) ;}
