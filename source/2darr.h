@@ -36,24 +36,6 @@ int ** createArr2d(int n, int m){
   return tab;
 }
 
-void fillArr2d(int ** tab, int n, int m)
-// Asks for values to fill a 2 dimensions array
-{
-  int i,j;
-  int valeur = 0;
-  for(i = 0; i < n; i++)
-  {
-    // printf("i%d",i);
-    for(j = 0; j < m; j++)
-    {
-      //printf("j%d",j);
-      printf("[%d, %d]: ", i + 1, j + 1);
-      scanf("%d", &valeur);
-      tab[i][j] = valeur;
-    }
-  }
-}
-
 void printArr2d(int ** tab, int n, int m)
 // Prints a 2 dimensions array
 {

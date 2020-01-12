@@ -95,7 +95,7 @@ void fillPlateau(int ** plateau, int largeur, int hauteur, FILE * level){
       for(j = 0; j < largeur; j++){
       carac = fgetc(level); // Lit et avance d'un caractère
       printf("%c", carac);
-      plateau[j][i] = carac; // Ça devrait marcher :c
+      plateau[j][i] = carac;
     }
     fgetc(level); // Enlève le retour à la ligne
   }
