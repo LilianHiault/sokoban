@@ -8,6 +8,8 @@
 \usepackage{siunitx}
 \usepackage{lmodern}
 \usepackage[a4paper]{geometry}
+\usepackage{float}
+\usepackage{fancyvrb}
 \usepackage{graphicx}
 \usepackage{xcolor}
 \usepackage{microtype}
@@ -37,5 +39,200 @@
 
 Le projet de programmation avancée à réaliser est le jeu du Sokoban. C'est un jeu dans lequel un personnage doit déplacer des caisses vers des points d'intérêts sans être bloqué par les murs.
 Nous avons programmé ce jeu en langage C en utilisant la librairie SDL 1.2 pour l'affichage graphique.
+
+\section{Modélisation du plateau}
+
+\subsection{Modélisation d'un niveau}
+
+Les niveaux de jeu sont stockés sous forme de fichiers texte dont la première ligne donne la largeur du niveau et la seconde sa hauteur.
+Le fichier représente le niveau dont les objets sont représentés par des caractères :
+\begin{itemize}
+  \item ' ' pour le sol
+  \item '\#' pour les murs
+  \item 'I' pour les points d'intérêts
+  \item 'C' pour les caisses et 'c' si elles sont sur des points d'intérêts
+  \item 'P' pour le personnage et 'p' si il est sur un points d'intérêt
+\end{itemize}
+
+Par exemple ceci est un niveau valide :
+
+\begin{figure}[H]
+  \begin{BVerbatim}
+10
+8
+##########
+#        #
+#   I    #
+#   C    #
+#        #
+#   P    #
+#        #
+##########
+  \end{BVerbatim}
+\caption{Niveau valide du jeu du Sokoban}
+\end{figure}
+
+On peut choisir grâce à un switch le niveau à charger :
+
+\begin{verbatim}
+FILE * level = NULL;
+if((level = fopen(fileLevel, "r")) == NULL){
+  perror("Problème d'ouverture du fichier de niveau");
+  exit(EXIT_FAILURE);
+}
+\end{verbatim}
+
+\subsection{Création du plateau}
+
+On extrait les deux premières lignes du fichier qu'on a ouvert pour connaître la taille du plateau de jeu.
+
+\begin{verbatim}
+fgets(buffer,BUFSIZ,level);
+*largeur = strtol(buffer,NULL,10);
+fgets(buffer,BUFSIZ,level);
+*hauteur = strtol(buffer,NULL,10);
+\end{verbatim}
+
+fgets permet de lire la ligne et d'avancer le descripteur à la ligne suivante puis on utilise strtol sur la chaîne de caractère extraite afin de la convertir en entier.
+\\
+
+Le plateau de jeu est un tableau de caractères en deux dimensions
+
+ \begin{verbatim}
+  char ** TJeu = createArr2d(largeur, hauteur);
+\end{verbatim}
+
+\subsection{Remplir le plateau de jeu}
+
+On remplit le tableau avec les caractères du fichier du niveau :
+
+\begin{verbatim}
+  for(int j =0; j< (*hauteur);j++){
+    fgets(buffer,BUFSIZ,level);
+      for(i=0;i< (*largeur);i++){
+        TJeu[i][j]=buffer[i];
+      }
+    }
+  }
+\end{verbatim}
+
+Le fichier est lu ligne par ligne puis les caractères sont copiés dans le tableau.
+
+\section{Fonctionnement du jeu}
+
+\subsection{Trouver le personnage}
+Au début de la boucle principale on effectue une recherche dans le plateau de jeu pour trouver le personnage qu'il soit sur une case normale ou un point d'intérêt.
+\begin{verbatim}
+  void trouvePerso(char ** TJeu,int hauteur,int largeur,pos * perso,char* caseInit){
+    perso->x=0;
+    perso->y=0;
+    int i,j;
+    for(i = 0; i < largeur; i++)
+    {
+      for(j = 0; j < hauteur; j++) {
+        if(TJeu[i][j]=='p' || TJeu[i][j]=='P'){
+  	        perso->x = j;
+  	        perso->y = i;
+  	       }
+        }
+      }
+    caseInit=&TJeu[perso->y][perso->x];
+    }
+  }
+\end{verbatim}
+
+\subsection{Pause}
+
+C'est unfonction qui met en pause le jeu jusqu'à une entrée du clavier, et qui renvoie la touche enfoncée.
+
+\begin{verbatim}
+  SDL_Event pause(){
+  int cont=1;
+  SDL_Event event;
+  while( cont){
+    SDL_WaitEvent(&event);
+    switch(event.type){
+    case SDL_QUIT:
+      cont=0;
+      break;
+    case SDL_KEYDOWN:
+      cont=0;
+      break;
+    default:
+      cont=1;
+    }
+  }
+  return(event);
+}
+\end{verbatim}
+
+\subsection{Déplacement du personnage}
+
+La fonction deplacement() est centrale, c'est la boucle de jeu dans laquelle les saisies clavier sont enregistrées pour pour qu'il puisse y avoir un déplacement du personnage et qu'il soit affiché.
+\begin{verbatim}
+void deplacement(char ** TJeu, int hauteur, int largeur);
+\end{verbatim}
+La variable cont restera vraie tant que l'utilisateur n'appuie pas sur 'q' ou  ne reçoive le signal 'SDL\_QUIT' et tant qu'elle est vraie, la boucle de jeu continue de tourner.
+
+
+\begin{verbatim}
+    event= pause();
+    switch(event.type){
+    ...
+\end{verbatim}
+Ici, on utilise un switch pour trouver sur quelle touche l'utilisateur a appuyé.
+Puis s'il a appuyé sur une touche de direction déplace le personnage.
+
+\subsection{Bouge}
+
+\begin{verbatim}
+void bouge(char** TJeu,char objet,int hauteur,int largeur, pos * posPrev, pos * posSuiv);
+\end{verbatim}
+
+bouge() permet à partir de deux points (celui où est le personnage et sa destination) de verifier s'il est possible de se déplacer selon la présence d'obstacles et effectue ensuite le mouvement.
+
+La fonction effectue des tests sur la position d'arrivée afin de déterminer la nature de la case.
+\begin{itemize}
+  \item si c'est au-delà de la bordure du niveau ou que c'est un mur alors il ne peut pas se déplacer
+  \item si c'est une caisse alors on vérifie une case plus loin afin de savoir s'il peut la déplacer
+  \item sinon c'est soit un point d'intérêt soit une case vide donc le personnage peut y aller
+\end{itemize}
+Puis on applique le changement de position de joueur et/ou de la caisse en modifiant le contenu du plateau de jeu.
+
+\subsection{Victoire}
+La fonction victoire() verifie s'il existe encore des points d'intérêt non recouverts par des caisses.
+Elle parcours le tableau à la recherche de 'I' (points d'intérêts sans caisse dessus) ou 'p' (personnage sur un point d'intérêt).
+\begin{verbatim}
+ void victoire(char** TJeu, int hauteur,int largeur, int* cont){
+  int i=0;
+  int j=0;
+  int reste = 1;
+  *cont=0;
+  while(i<largeur && reste){
+    while(j<hauteur && reste){
+      if((TJeu[i][j]=='I'|| TJeu[i][j]=='p') && reste){
+	reste=0;
+	*cont=1;
+      }
+      j++;
+    }
+    j=0;
+    i++;
+  }
+}
+\end{verbatim}
+
+\section{Affichage graphique}
+
+\subsection{Dessiner une surface}
+
+On défini dans le main()
+
+
+\subsection{dessineTJeu}
+
+ dessineTJeu() est une fonction qui affiche le plateau de jeu a partir d'un tableau en deux dimensions de caractères. Elle remplit la surface pour la remettre a zéro, puis associe a chaque case une image.
+
+\section{Main}
 
 \end{document}
