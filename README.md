@@ -5,10 +5,10 @@ Projet : jeu du Sokoban  – L2 informatique, programmation avancée
 ## Objectifs
 
 A faire :
-- [ ] Chargement et affichage d’un plateau de jeu.
-- [ ] Positionnement et gestion du personnage.
-- [ ] Positionnement des points à couvrir.
-- [ ] Positionnement des caisses et leurs déplacement.
+- [x] Chargement et affichage d’un plateau de jeu.
+- [x] Positionnement et gestion du personnage.
+- [x] Positionnement des points à couvrir.
+- [x] Positionnement des caisses et leurs déplacement.
 
 Facultatif :
 - [ ] Chargement d’un labyrinthe depuis un fichier texte, à la manière de la description qui est faite dans le TP5. Où le caractère # représentera les murs, le caractère P représentera le personnage, le caractère C représentera une caisse et le caractère I représentera un point d’intérêt.

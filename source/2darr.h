@@ -1,74 +1,91 @@
+#include <stdlib.h>
+
 /* --- Protoypes --- */
 
-void fillArr2d(int **, int, int);
+void printArr2d(char ** , int, int);
 
-void printArr2d(int ** , int, int);
+char ** createArr2d(int, int);
 
-int ** createArr2d(int, int);
+void freeArr2d(char **, int);
 
-void freeArr2d(int **, int);
+char ** reverseArr2d(char ** tab, int n, int m);
+
+void remplirTab(char ** tab, int n, int m);
 
 
 /* --- Functions --- */
 
-int ** createArr2d(int n, int m){
+char ** createArr2d(int n, int m) {
   // Creates 2 dimensions array
-  int ** tab = NULL;
-  if ((tab = malloc(n * sizeof(*tab)) == NULL)){
-    //perror
+  char ** tab = NULL;
+  tab = malloc(n * sizeof(*tab));
+  if (tab == NULL){
+    perror("Problème lors de la création du tableau");
+    exit(EXIT_FAILURE);
   }
 
   int i, k;
   for(i = 0; i < n; i++){
-    if ((tab[i] = malloc(m * sizeof(*tab[i])) == NULL)){
+    tab[i] = malloc(m * sizeof(*tab[i]));
+    if (tab[i] == NULL){
       for(k = 0; k <= i; k++){
         free(tab[k]);
       }
       free(tab);
-      break;
+      perror("Problème lors de la création du tableau");
+      exit(EXIT_FAILURE);
     }
   }
   return tab;
 }
 
-void fillArr2d(int ** tab, int n, int m)
-// Asks for values to fill a 2 dimensions array
+void printArr2d(char ** tab, int n, int m)
+// Prints a 2 dimensions array
 {
   int i,j;
-  int valeur = 0;
+  for(i = 0; i < n; i++)
+  {
+    for(j = 0; j < m; j++)
+    {
+      printf("%c", tab[i][j]);
+    }
+    printf("\n");
+  }
+}
+
+void freeArr2d(char ** tab, int taille){
+  int i;
+  for(i = 0; i < taille; i++){
+    free(tab[i]);
+  }
+  free(tab);
+}
+
+char ** reverseArr2d(char ** tab, int n, int m) {
+  int i, j;
+  char ** inverse = createArr2d(m, n);
+  for(i = 0; i < m; i++) {
+    for(j = 0; j < n; j++) {
+      inverse[i][j] = tab[j][i];
+    }
+  }
+  return inverse;
+}
+
+void remplirTab(char ** tab, int n, int m)
+// Remplit une matrice
+{
+  int i,j;
+  char valeur;
   for(i = 0; i < n; i++)
   {
     // printf("i%d",i);
     for(j = 0; j < m; j++)
     {
       //printf("j%d",j);
-      printf("[%d, %d]: ", i + 1, j + 1);
-      scanf("%d", &valeur);
+      printf("Valeur de [%d, %d] : ", i, j);
+      scanf("%c", &valeur);
       tab[i][j] = valeur;
     }
   }
-}
-
-void printArr2d(int ** tab, int n, int m)
-// Prints a 2 dimensions array
-{
-  int i,j;
-  for(i = 0; i < n; i++)
-  {
-    printf("\n");
-    for(j = 0; j < m; j++)
-    {
-      printf("%d ", tab[i][j]);
-    }
-    printf("\n");
-  }
-  printf("\n");
-}
-
-void freeArr2d(int ** tab, int taille){
-  int i;
-  for(i = 0; i < taille; i++){
-    free(tab[i]);
-  }
-  free(tab);
 }

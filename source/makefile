@@ -4,11 +4,11 @@ OBJETS= sokoban.o
 
 all:sokoban
 
-sokoban:$(OBJETS)
-	$(CC) $(FLAGS) -o $@ $(OBJETS)
+sokoban:$(OBJETS) 2darr.h
+	$(CC) $(FLAGS) `sdl-config --libs` -o $@ $(OBJETS)
 
 sokoban.o:sokoban.c
-	$(CC) $(FLAGS) -c $<
+	$(CC) $(FLAGS) `sdl-config --cflags` -c $<
 
 clean:
 	rm -f $(OBJETS)
