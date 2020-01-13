@@ -73,15 +73,15 @@ int main(){
   FILE *level;
   switch(choix){
   case 1 :
-    level =fopen("level1.txt","r");
+    level =fopen("levels/level1.txt","r");
     break;
 
   case 2 :
-    level =fopen("level2.txt","r");
+    level =fopen("levels/level2.txt","r");
     break;
 
   default :
-    level =fopen("level3.txt","r");
+    level =fopen("levels/level3.txt","r");
   }
 
   tabFile(level,TJeu,&hauteur,&largeur);
