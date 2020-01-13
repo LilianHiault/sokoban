@@ -60,7 +60,6 @@ void dessineTJeu(char ** TJeu, int ,int); // fonction qui affiche le plateau de 
 int main(){
   int hauteur;
   int largeur;
-  int i,j;
   int WIDTH;
   int HEIGHT;
 
