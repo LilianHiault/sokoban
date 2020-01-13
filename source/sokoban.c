@@ -18,7 +18,7 @@ typedef struct pos{
 
 /* --- Prototypes de fonction --- */
 
-void fillPlateau(int ** plateau, int largeur, int hauteur, FILE * level);
+void initPlateau(int ** plateau, int largeur, int hauteur, FILE * level);
 
 
 /* --- Main --- */
@@ -69,7 +69,7 @@ int main (int argc, char * argv[]) {
 
   // Mettre le contenu du niveau dans le plateau de jeu
 
-  fillPlateau(plateau, largeur, hauteur, level);
+  initPlateau(plateau, largeur, hauteur, level);
 
   printf("\n");
   printArr2d(plateau, largeur, hauteur);
@@ -85,7 +85,7 @@ int main (int argc, char * argv[]) {
   return 0;
 }
 
-void fillPlateau(int ** plateau, int largeur, int hauteur, FILE * level){
+void initPlateau(int ** plateau, int largeur, int hauteur, FILE * level){
   /* --- Mettre le contenu du niveau dans le plateau de jeu --- */
   int i, j;
   for(i = 0; i < hauteur; i++){
