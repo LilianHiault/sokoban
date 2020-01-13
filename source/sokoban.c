@@ -64,16 +64,12 @@ int main (int argc, char * argv[]) {
   }
 
   // Création du plateau de jeu
-
   char ** plateau = createArr2d(largeur, hauteur);
 
   // Mettre le contenu du niveau dans le plateau de jeu
 
   initPlateau(plateau, largeur, hauteur, level);
   printf("\n");
-  printArr2d(plateau, largeur, hauteur);
-  plateau[9][7] = 'D';
-  plateau[0][0] = 'A';
   printArr2d(plateau, largeur, hauteur);
 
   // Fermeture du fichier niveau
