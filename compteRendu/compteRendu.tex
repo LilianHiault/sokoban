@@ -224,15 +224,47 @@ Elle parcours le tableau à la recherche de 'I' (points d'intérêts sans caisse
 
 \section{Affichage graphique}
 
-\subsection{Dessiner une surface}
+\subsection{Afficher la fenêtre}
 
-On défini dans le main()
+On défini dans le main() la taille de la fenêtre en fonction de la hauteur et largeur du niveau de manière a avoir 32 pixels par objet du niveau.
+On initialise alors la fenêtre et on charge les différentes images :
+\begin{verbatim}
+  if(SDL_Init(SDL_INIT_VIDEO) == 1){
+    fprintf(stderr,"Erreur SDL : %s\n",SDL_GetError());
+    return -1;
+  }
+  if(( ecran = SDL_SetVideoMode(WIDTH,HEIGHT,32,SDL_HWSURFACE)) == NULL){
+    fprintf(stderr,"Erreur VideoMode : %s\n",SDL_GetError());
+    exit(EXIT_FAILURE);}
+\end{verbatim}
+
+\begin{verbatim}
+  SDL_FillRect(ecran,NULL,SDL_MapRGB(ecran->format,150,200,175));
+  SDL_Flip(ecran);
+  OFF =  SDL_LoadBMP("interrupteurOff.bmp");
+  ON =  SDL_LoadBMP("interrupteurOn.bmp");
+  Begin = SDL_LoadBMP("Begin.bmp");
+  Brique = SDL_LoadBMP("Bloc.bmp");
+  Michel = SDL_LoadBMP("Michel2.bmp");
+  MichelPoint = SDL_LoadBMP("MichelPoint.bmp");
+  Point = SDL_LoadBMP("Point.bmp");
+
+  SDL_WM_SetCaption("SokobanBV",NULL);
+  SDL_Flip(ecran);
+\end{verbatim}
 
 
-\subsection{dessineTJeu}
+\subsection{Afficher le niveau}
 
- dessineTJeu() est une fonction qui affiche le plateau de jeu a partir d'un tableau en deux dimensions de caractères. Elle remplit la surface pour la remettre a zéro, puis associe a chaque case une image.
+dessine() permet d'afficher une surface à l'écran
 
-\section{Main}
+dessineTJeu() est une fonction qui affiche le plateau de jeu a partir d'un tableau en deux dimensions de caractères.
+Elle colore la surface pour la remettre a zéro, puis associe a chaque case une image.
+Elle lit le plateau en mémoire et selon le caractère dans la case, elle appelle dessine() pour afficher l'image correspondant à l'objet.
+
+\section*{Conclusion}
+Grâce à ce projet nous avons pu améliorer nos connaissances surtout au niveau de l'affichage graphique.
+Outre l'affichage il était intéressant de travailler à plusieurs surtout lorsqu'on a des idées différentes pour résoudre un problème.
+Enfin cela nous a permis de nous poser des questions sur comment modéliser le jeu ou alors quel est le lien entre ce qu'on voit et ce qui est programmé. 
 
 \end{document}
