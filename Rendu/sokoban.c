@@ -4,7 +4,7 @@
 #include<SDL_types.h>
 #include<time.h>
 #include<string.h>
-#include"../source/2darr.h"
+#include"2darr.h"
 
 typedef struct pos{
   int x;
