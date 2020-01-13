@@ -4,6 +4,7 @@
 #include<SDL_types.h>
 #include<time.h>
 #include<string.h>
+#include"../source/2darr.h"
 
 typedef struct pos{
   int x;
@@ -12,6 +13,7 @@ typedef struct pos{
 
 
 #define LC 32
+SDL_Surface * Begin = NULL;
 SDL_Surface * Brique = NULL;
 SDL_Surface * Michel = NULL;
 SDL_Surface * ON = NULL;
@@ -22,6 +24,12 @@ SDL_Surface * ecran = NULL;
 SDL_Surface * rectangle = NULL;
 SDL_Surface * carre = NULL;
 SDL_Rect position;
+
+
+////////////////////////////////////////////////////////////
+// Tableau
+////////////////////////////////////////////////////////////
+void tabFile(FILE *,char**,int*,int*);
 
 
 ////////////////////////////////////////////////////////////
@@ -50,28 +58,55 @@ void dessineTJeu(char ** TJeu, int ,int); // fonction qui affiche le plateau de 
 ////////////////////////////////////////////////////////////
 
 int main(){
-  int hauteur = 4;
-  int largeur =7;
+  int hauteur;
+  int largeur;
   int i,j;
-  int WIDTH =  largeur * LC;
-  int HEIGHT= hauteur * LC;
+  int WIDTH;
+  int HEIGHT;
 
+
+  //Creation du Tableau
+  
+  char** TJeu;
+  printf("Numero Du Niveau entre un et 3\n");
+  int choix = 0;
+  scanf("%d",&choix);
+  FILE *level;
+  switch(choix){
+  case 1 :
+    level =fopen("level1.txt","r");
+    break;
+    
+  case 2 :
+    level =fopen("level2.txt","r");
+    break;
+    
+  default :
+    level =fopen("level3.txt","r");
+  }
+  
+  tabFile(level,TJeu,&hauteur,&largeur);
+  WIDTH =  largeur * LC;
+  HEIGHT= hauteur * LC;
+  printf("largeur %d hauteur %d\n",largeur,hauteur);
+
+    
   //Initialisation de la surface et des images
   if(SDL_Init(SDL_INIT_VIDEO) == 1){
     fprintf(stderr,"Erreur SDL : %s\n",SDL_GetError());
     return -1;
   }
-
+ 
   if(( ecran = SDL_SetVideoMode(WIDTH,HEIGHT,32,SDL_HWSURFACE)) == NULL){
     fprintf(stderr,"Erreur VideoMode : %s\n",SDL_GetError());
     exit(EXIT_FAILURE);}
 
 
   SDL_FillRect(ecran,NULL,SDL_MapRGB(ecran->format,150,200,175));
-  SDL_Flip(ecran);
-  
+  SDL_Flip(ecran);  
   OFF =  SDL_LoadBMP("interrupteurOff.bmp");
   ON =  SDL_LoadBMP("interrupteurOn.bmp");
+  Begin = SDL_LoadBMP("Begin.bmp");
   Brique = SDL_LoadBMP("Bloc.bmp");
   Michel = SDL_LoadBMP("Michel2.bmp");
   MichelPoint = SDL_LoadBMP("MichelPoint.bmp");
@@ -79,38 +114,20 @@ int main(){
   
   SDL_WM_SetCaption("SokobanBV",NULL);
   SDL_Flip(ecran);
-
-  //Creation du Tableau
   
-  char** TJeu =(char**) malloc(largeur*sizeof(char*));
-  for(i=0; i<largeur;i++){
-  TJeu[i]=   (char*) malloc((hauteur+1)*sizeof(char));
-  }
-
-  
-  for(i = 0; i < largeur; i++)
-  {
-    for(j = 0; j < hauteur; j++)
-    {
-       TJeu[i][j]=' ';
-    }
-    TJeu[i][2]='#';
-  }
-  TJeu[3][3]='P';
-  TJeu[2][2]='I';
-  TJeu[1][1]='C';
-  TJeu[5][0]='I';
-  TJeu[4][1]='C';
-  TJeu[4][2]=' ';
-  TJeu[5][2]=' ';
-  
-  
+  /*  position.x = 0;
+  position.y =0;
+  dessine(Begin);*/
   //Boucle de jeu
+  pause();
+  afficheTab2D(TJeu,hauteur,largeur);
+  
+  printf("check");
   deplacement(TJeu,hauteur,largeur);
   SDL_FreeSurface(ecran);
   SDL_Quit();
   free(TJeu);
-  
+  fclose(level);
   return 0;}
 
 
@@ -388,10 +405,41 @@ void afficheTab2D(char ** tab, int hauteur,int largeur)
     printf("\n");
     for(j = 0; j < largeur; j++)
     {
-      printf("%c  ", tab[j][i]);
+      printf("%c  ", tab[i][j]);
     }
     printf("\n");
   }
   printf("\n");
 }
 
+void tabFile(FILE * level,char** TJeu,int*hauteur,int*largeur){
+  
+  int i;
+  char buffer[BUFSIZ];
+  *largeur=0;
+  *hauteur=0;
+  fgets(buffer,BUFSIZ,level);
+  *largeur = strtol(buffer,NULL,10);
+  fgets(buffer,BUFSIZ,level);
+  *hauteur = strtol(buffer,NULL,10);
+  
+  // printf("largeur %d hauteur %d\n",*largeur,*hauteur);
+    
+  TJeu = (char**)malloc((*largeur)*sizeof(char*));
+  for(i =0; i<(*largeur);i++){
+    TJeu[i]= (char*)malloc((*hauteur)*sizeof(char));
+    
+  }
+  // TJeu[0][0]='a';
+  //printf("%c",TJeu[0][0]);
+  
+  for(int j =0; j< (*hauteur);j++){
+    fgets(buffer,BUFSIZ,level);
+    //printf("%s",buffer);
+    printf("\n");
+    for(i=0;i< (*largeur);i++){
+      TJeu[i][j]=buffer[i];
+      // printf("%c",TJeu[i][j]);
+    }
+  }
+}
