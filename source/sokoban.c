@@ -1,25 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <SDL.h>
+#include <SDL_types.h>
+#include <time.h>
 
 #include "2darr.h"
 
 
 /* --- Structures --- */
 
-typedef struct position{
+typedef struct pos{
   int x;
   int y;
-}position;
-
-struct player{
-  position pos;
-};
+}pos;
 
 
 /* --- Prototypes de fonction --- */
-
-void fillPlateau(int ** plateau, int largeur, int hauteur, FILE * level);
 
 void fillPlateau(int ** plateau, int largeur, int hauteur, FILE * level);
 
