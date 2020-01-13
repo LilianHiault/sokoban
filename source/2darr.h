@@ -15,7 +15,7 @@ void remplirTab(char ** tab, int n, int m);
 
 /* --- Functions --- */
 
-char ** createArr2d(int n, int m){
+char ** createArr2d(int n, int m) {
   // Creates 2 dimensions array
   char ** tab = NULL;
   tab = malloc(n * sizeof(*tab));
@@ -63,7 +63,7 @@ void freeArr2d(char ** tab, int taille){
 
 char ** reverseArr2d(char ** tab, int n, int m) {
   int i, j;
-  char ** inverse = createArr2d(n, m);
+  char ** inverse = createArr2d(m, n);
   for(i = 0; i < m; i++) {
     for(j = 0; j < n; j++) {
       inverse[i][j] = tab[j][i];
