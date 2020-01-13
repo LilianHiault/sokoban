@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <SDL.h>
-#include <SDL_types.h>
+#include <SDL/SDL.h>
+#include <SDL/SDL_types.h>
 #include <time.h>
 
 #include "2darr.h"
@@ -18,7 +18,7 @@ typedef struct pos{
 
 /* --- Prototypes de fonction --- */
 
-void initPlateau(int ** plateau, int largeur, int hauteur, FILE * level);
+void initPlateau(char ** plateau, int largeur, int hauteur, FILE * level);
 
 
 /* --- Main --- */
@@ -65,13 +65,15 @@ int main (int argc, char * argv[]) {
 
   // Création du plateau de jeu
 
-  int ** plateau = createArr2d(largeur, hauteur);
+  char ** plateau = createArr2d(largeur, hauteur);
 
   // Mettre le contenu du niveau dans le plateau de jeu
 
   initPlateau(plateau, largeur, hauteur, level);
-
   printf("\n");
+  printArr2d(plateau, largeur, hauteur);
+  plateau[9][7] = 'D';
+  plateau[0][0] = 'A';
   printArr2d(plateau, largeur, hauteur);
 
   // Fermeture du fichier niveau
@@ -85,12 +87,12 @@ int main (int argc, char * argv[]) {
   return 0;
 }
 
-void initPlateau(int ** plateau, int largeur, int hauteur, FILE * level){
+void initPlateau(char ** plateau, int largeur, int hauteur, FILE * level){
   /* --- Mettre le contenu du niveau dans le plateau de jeu --- */
   int i, j;
   for(i = 0; i < hauteur; i++){
     for(j = 0; j < largeur; j++){
-      plateau[j][i] = fgetc(level); // Lit et avance d'un caractère
+      plateau[i][j] = fgetc(level); // Lit et avance d'un caractère
     }
     fgetc(level); // Enlève le retour à la ligne
   }
