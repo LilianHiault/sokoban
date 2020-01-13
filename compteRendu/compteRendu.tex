@@ -39,7 +39,8 @@
 
 Le projet de programmation avancée à réaliser est le jeu du Sokoban. C'est un jeu dans lequel un personnage doit déplacer des caisses vers des points d'intérêts sans être bloqué par les murs.
 Nous avons programmé ce jeu en langage C en utilisant la librairie SDL 1.2 pour l'affichage graphique.
-Pour créer l'executable du jeu entrer : make, puis ./sokoban pour le lancer.
+Pour créer l'executable du jeu entrer : 'make', puis './sokoban' pour le lancer.
+Si 'make' ne fonctionne pas entrer ces commandes : 'gcc -c sokoban.c `sdl-config --cflags`' puis 'gcc -o sokoban sokoban.o `sdl-config --libs`'.
 
 \section{Modélisation du plateau}
 

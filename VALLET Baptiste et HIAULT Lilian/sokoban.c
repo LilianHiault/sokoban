@@ -29,7 +29,7 @@ SDL_Rect position;
 ////////////////////////////////////////////////////////////
 // Tableau
 ////////////////////////////////////////////////////////////
-void tabFile(FILE *,char**,int*,int*);
+char** tabFile(FILE *,int*,int*);
 
 
 ////////////////////////////////////////////////////////////
@@ -66,28 +66,36 @@ int main(){
 
   //Creation du Tableau
 
-  char** TJeu;
   printf("Numero Du Niveau entre un et 3\n");
   int choix = 0;
   scanf("%d",&choix);
-  FILE *level;
+  FILE *level= NULL;
+
   switch(choix){
   case 1 :
-    level =fopen("levels/level1.txt","r");
+    if(( level =fopen("levels/level1.txt","r")) == NULL){
+      perror("Probleme ouverture du fichier");
+      exit(EXIT_FAILURE);}
     break;
 
   case 2 :
-    level =fopen("levels/level2.txt","r");
+    if(( level =fopen("levels/level2.txt","r")) == NULL){
+      perror("Probleme ouverture du fichier");
+      exit(EXIT_FAILURE);}
     break;
 
   default :
-    level =fopen("levels/level3.txt","r");
+    if(( level =fopen("levels/level3.txt","r")) == NULL){
+      perror("Probleme ouverture du fichier");
+      exit(EXIT_FAILURE);}
   }
 
-  tabFile(level,TJeu,&hauteur,&largeur);
+
+  char** TJeu=tabFile(level,&hauteur,&largeur);
   WIDTH =  largeur * LC;
   HEIGHT= hauteur * LC;
-  printf("largeur %d hauteur %d\n",largeur,hauteur);
+  //printf("largeur %d hauteur %d\n",largeur,hauteur);
+  //  printf("case 0 0 = %c\n",TJeu[0][0]);
 
 
   //Initialisation de la surface et des images
@@ -103,31 +111,30 @@ int main(){
 
   SDL_FillRect(ecran,NULL,SDL_MapRGB(ecran->format,150,200,175));
   SDL_Flip(ecran);
-  OFF =  SDL_LoadBMP("interrupteurOff.bmp");
-  ON =  SDL_LoadBMP("interrupteurOn.bmp");
-  Begin = SDL_LoadBMP("Begin.bmp");
-  Brique = SDL_LoadBMP("Bloc.bmp");
-  Michel = SDL_LoadBMP("Michel2.bmp");
-  MichelPoint = SDL_LoadBMP("MichelPoint.bmp");
-  Point = SDL_LoadBMP("Point.bmp");
+  OFF =  SDL_LoadBMP("img/interrupteurOff.bmp");
+  ON =  SDL_LoadBMP("img/interrupteurOn.bmp");
+  Begin = SDL_LoadBMP("img/Begin.bmp");
+  Brique = SDL_LoadBMP("img/Bloc.bmp");
+  Michel = SDL_LoadBMP("img/Michel2.bmp");
+  MichelPoint = SDL_LoadBMP("img/MichelPoint.bmp");
+  Point = SDL_LoadBMP("img/Point.bmp");
 
   SDL_WM_SetCaption("SokobanBV",NULL);
   SDL_Flip(ecran);
 
-  /*  position.x = 0;
+  position.x = 0;
   position.y =0;
-  dessine(Begin);*/
+  dessine(Begin);
+  SDL_Flip(ecran);
   //Boucle de jeu
-  pause();
-  afficheTab2D(TJeu,hauteur,largeur);
+  //afficheTab2D(TJeu,hauteur,largeur);
 
-  printf("check");
   deplacement(TJeu,hauteur,largeur);
   SDL_FreeSurface(ecran);
   SDL_Quit();
   free(TJeu);
   fclose(level);
-  return 0;}
+    return 0;}
 
 
 
@@ -143,13 +150,13 @@ void trouvePerso(char ** TJeu,int hauteur,int largeur,pos * perso,char* caseInit
   perso->y=0;
 
   int i,j;
-  for(i = 0; i < largeur; i++)
+  for(j = 0; j < hauteur; j++)
   {
-    for(j = 0; j < hauteur; j++)
+    for(i = 0; i < largeur; i++)
       {
         if(TJeu[i][j]=='p' || TJeu[i][j]=='P'){
-	  perso->x = j;
-	  perso->y = i;
+	  perso->x = i;
+	  perso->y = j;
 	}
       }
   }
@@ -201,6 +208,7 @@ void deplacement(char** TJeu,int hauteur,int largeur){
     // On remet les memes valeurs aux cases avant apres
     posPrev= perso;
     exCase=nouvCase;
+    //   printf("case %d %d\n",perso.x,perso.y);
 
     // Interpretation de l entree
     event= pause();
@@ -399,19 +407,19 @@ void dessineTJeu(char ** TJeu,int hauteur, int largeur){
 void afficheTab2D(char ** tab, int hauteur,int largeur)
 {
   int i,j;
-  for(i = 0; i < hauteur; i++)
+  for(j = 0; j < hauteur; j++)
   {
     printf("\n");
-    for(j = 0; j < largeur; j++)
+    for(i = 0; i < largeur; i++)
     {
-      printf("%c  ", tab[i][j]);
+      printf("%c ", tab[i][j]);
     }
     printf("\n");
   }
   printf("\n");
 }
 
-void tabFile(FILE * level,char** TJeu,int*hauteur,int*largeur){
+char** tabFile(FILE * level,int*hauteur,int*largeur){
 
   int i;
   char buffer[BUFSIZ];
@@ -422,23 +430,19 @@ void tabFile(FILE * level,char** TJeu,int*hauteur,int*largeur){
   fgets(buffer,BUFSIZ,level);
   *hauteur = strtol(buffer,NULL,10);
 
-  // printf("largeur %d hauteur %d\n",*largeur,*hauteur);
+  //printf("largeur %d hauteur %d\n",*largeur,*hauteur);
 
-  TJeu = (char**)malloc((*largeur)*sizeof(char*));
-  for(i =0; i<(*largeur);i++){
-    TJeu[i]= (char*)malloc((*hauteur)*sizeof(char));
-
-  }
+  char** TJeu =createArr2d(*largeur,*hauteur);
   // TJeu[0][0]='a';
   //printf("%c",TJeu[0][0]);
 
   for(int j =0; j< (*hauteur);j++){
     fgets(buffer,BUFSIZ,level);
-    //printf("%s",buffer);
-    printf("\n");
+    //printf("\n");
     for(i=0;i< (*largeur);i++){
       TJeu[i][j]=buffer[i];
       // printf("%c",TJeu[i][j]);
     }
   }
+  return TJeu;
 }
