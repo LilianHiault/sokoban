@@ -5,7 +5,7 @@ OBJETS= sokoban.o
 all:sokoban
 
 sokoban:$(OBJETS) 2darr.h
-	$(CC) $(FLAGS) `sdl-config --libs` -o $@ $(OBJETS)
+	$(CC) $(FLAGS) -o $@ $(OBJETS) `sdl-config --libs`
 
 sokoban.o:sokoban.c
 	$(CC) $(FLAGS) `sdl-config --cflags` -c $<
