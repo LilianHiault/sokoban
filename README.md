@@ -1,6 +1,30 @@
 # Sokoban
 
-Projet : jeu du Sokoban  – L2 informatique, programmation avancée
+Projet : jeu du Sokoban  – L2 informatique, programmation avancée.
+
+Créé par Baptiste et Lilian.
+
+## Installation
+
+Voici comment installer le jeu du sokoban.
+```
+git clone https://github.com/LilianHiault/sokoban.git
+cd sokoban/game/
+make
+make clean
+```
+
+Pour jouer lancez simplement `./sokoban`.
+
+
+## Créer un niveau
+
+- Représenter le jeu par un tableau en deux dimensions dans lequel on représentera les différents objets par exemple :
+- ' ' pour le sol
+- '#' pour les murs
+- 'I' pour les points d'intérêts
+- 'C' pour les caisses et 'c' si elles sont sur des points d'intérêts (les caisses doivent être en nombre supérieur ou égal au nombre de points d'intérêts pour pouvoir finir le jeu)
+- 'P' pour le personnage et 'p' si il est sur un points d'intérêt (il ne doit exister que un seul joueur)
 
 ## Objectifs
 
@@ -11,16 +35,7 @@ A faire :
 - [x] Positionnement des caisses et leurs déplacement.
 
 Facultatif :
-- [ ] Chargement d’un labyrinthe depuis un fichier texte, à la manière de la description qui est faite dans le TP5. Où le caractère # représentera les murs, le caractère P représentera le personnage, le caractère C représentera une caisse et le caractère I représentera un point d’intérêt.
+- [x] Chargement d’un labyrinthe depuis un fichier texte. Le caractère '#' représentera les murs, 'P' le personnage, 'C' une caisse et 'I' un point d’intérêt.
 - [ ] Affichage d’un score (qui pourra être calculé en fonction du temps passé, du nombre de mouvements du personnage et du nombre de caisses bien placées).
 - [ ] Affichage d’un chronomètre.
 - [ ] Gestion de niveaux et de difficultés.
-
-## Idées
-
-- Représenter le jeu par un tableau en deux dimensions dans lequel on représentera les différents objets par exemple :
-  - ' ' pour le sol
-  - '#' pour les murs
-  - 'I' pour les points d'intérêts
-  - 'C' pour les caisses et 'c' si elles sont sur des points d'intérêts
-  - 'P' pour le personnage et 'p' si il est sur un points d'intérêt
