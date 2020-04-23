@@ -6,7 +6,8 @@ Créé par Baptiste et Lilian.
 
 ## Installation
 
-Voici comment installer le jeu du sokoban.
+Prérequis : SDL1.2
+Installation du jeu :
 ```
 git clone https://github.com/LilianHiault/sokoban.git
 cd sokoban/game/
